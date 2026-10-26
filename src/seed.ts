@@ -78,18 +78,34 @@ export async function applyVaultDefaults(lifeos: LifeOS): Promise<void> {
       settings[key] = value;
     }
   }
-  settings.projectsPath = "10-Projects";
-  settings.areasPath = "20-Areas";
-  settings.resourcesPath = "30-Resources";
-  settings.archivesPath = "40-Archives";
-  settings.periodicNotesPath = "PeriodicNotes";
-  settings.weekStart = 1;
-  settings.onboardingVersion = 1;
-  settings.weeklyNoteFormat = "gggg-[W]WW";
   settings.locale = settings.locale || "zh-cn";
   settings.dailyRecordHeader = settings.dailyRecordHeader || "日常记录";
   settings.habitHeader = settings.habitHeader || "日常习惯";
   await lifeos.saveSettings(lifeos.settings);
+}
+
+/**
+ * 核心 Daily Notes 必须与 LifeOS 日路径对齐（home-ia.md 第 3 节）。
+ * 仅在 layout v2 迁移时调用一次：不一致则写 daily-notes.json，之后不再动。
+ */
+export async function validateDailyNotes(plugin: Plugin): Promise<void> {
+  const adapter = plugin.app.vault.adapter;
+  const path = `${plugin.app.vault.configDir}/daily-notes.json`;
+  const expected = {
+    folder: "PeriodicNotes/{{DATE:YYYY}}/[Daily]/{{DATE:MM}}",
+    format: "YYYY-MM-DD",
+    template: "PeriodicNotes/Templates/Daily",
+  };
+  let current: Record<string, unknown> = {};
+  try {
+    if (await adapter.exists(path)) {
+      current = JSON.parse(await adapter.read(path));
+    }
+  } catch {
+    current = {};
+  }
+  if (current.folder === expected.folder && current.format === expected.format && current.template === expected.template) return;
+  await adapter.write(path, JSON.stringify({ ...current, ...expected }, null, 2));
 }
 
 async function ensureDir(plugin: Plugin, folder: string): Promise<void> {
