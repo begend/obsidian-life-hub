@@ -9,8 +9,6 @@ export default class LifeHubPlugin extends Plugin {
   async onload(): Promise<void> {
     await migrateOldPluginData(this);
     this.hosted = await bootHosted(this);
-    const rssHome = (this.hosted.rss as unknown as { qiaomuHome?: unknown }).qiaomuHome;
-    if (rssHome) (this as unknown as { qiaomuHome?: unknown }).qiaomuHome = rssHome;
     await applyVaultDefaults(this.hosted.lifeos);
     if (applyHomeLayout(this.hosted.home)) await this.hosted.home.saveSettings();
     await seedTemplates(this, this.hosted.lifeos);

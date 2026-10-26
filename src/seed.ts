@@ -66,9 +66,8 @@ export async function migrateOldPluginData(host: Plugin): Promise<void> {
   };
   const home = await read("qiaomu-home");
   const lifeos = await read("periodic-para");
-  const rss = await read("qiaomu-ai-rss");
-  if (!home && !lifeos && !rss) return;
-  await host.saveData({ home, lifeos, rss });
+  if (!home && !lifeos) return;
+  await host.saveData({ home, lifeos });
 }
 
 export async function applyVaultDefaults(lifeos: LifeOS): Promise<void> {

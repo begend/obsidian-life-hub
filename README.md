@@ -1,6 +1,8 @@
 # Life Hub
 
-Obsidian 融合插件：把 [Qiaomu Home](https://github.com/joeseesun/qiaomu-home)、[LifeOS](https://github.com/quanru/obsidian-lifeos) 和 [Qiaomu AI RSS](https://github.com/joeseesun/qiaomu-ai-rss) 收成一个入口，并接上个人日/周模板。
+Obsidian 融合插件：把 [Qiaomu Home](https://github.com/joeseesun/qiaomu-home) 和 [LifeOS](https://github.com/quanru/obsidian-lifeos) 收成一个入口，并接上个人日/周模板。
+
+[Qiaomu AI RSS](https://github.com/joeseesun/qiaomu-ai-rss) 保持独立安装。首页阅读页通过乔木协议发现它，不必打进本仓库。
 
 这不是官方乔木或 LifeOS 发行版。许可证为 GPL-3.0-only，见 `LICENSE` 与 `NOTICE.md`。
 
@@ -10,7 +12,8 @@ Obsidian 融合插件：把 [Qiaomu Home](https://github.com/joeseesun/qiaomu-ho
 
 1. 构建：`npm install && npm run build`
 2. 把 `main.js`、`manifest.json`、`styles.css`、`templates/`、`assets/` 拷到库的 `.obsidian/plugins/life-hub/`
-3. 启用 Life Hub，关掉 `qiaomu-home`、`periodic-para`、`qiaomu-ai-rss`
+3. 启用 Life Hub，关掉 `qiaomu-home`、`periodic-para`
+4. 若要用阅读页 RSS，继续启用独立的 `qiaomu-ai-rss`
 
 ## 模板与默认路径
 

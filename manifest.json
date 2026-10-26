@@ -2,8 +2,8 @@
   "id": "life-hub",
   "name": "Life Hub",
   "version": "0.1.0",
-  "minAppVersion": "1.13.0",
-  "description": "Qiaomu Home + LifeOS + RSS 融合入口：壁纸、周期笔记、PARA、UseMemos、今日任务与个人模板。",
+  "minAppVersion": "1.11.4",
+  "description": "Qiaomu Home + LifeOS 融合入口：壁纸、周期笔记、PARA、UseMemos、今日任务与个人模板。阅读页 RSS 仍用独立的 Qiaomu AI RSS。",
   "author": "begend",
   "authorUrl": "https://github.com/begend",
   "isDesktopOnly": false

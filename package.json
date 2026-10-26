@@ -1,7 +1,7 @@
 {
   "name": "obsidian-life-hub",
   "version": "0.1.0",
-  "description": "Qiaomu Home + LifeOS + RSS fused Obsidian plugin",
+  "description": "Qiaomu Home + LifeOS fused Obsidian plugin",
   "license": "GPL-3.0-only",
   "private": true,
   "scripts": {
@@ -10,28 +10,18 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.5.1",
-    "@qiaomu/speech": "github:joeseesun/qiaomu-audio#e5999123f147d1590dd963e38cefe212d6c4f731",
     "antd": "^5.21.6",
     "dayjs": "^1.11.10",
-    "dompurify": "^3.4.17",
-    "lz-string": "1.5.0",
-    "marked": "^18.0.11",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "reduce-css-calc": "^2.1.8",
     "semver": "^7.6.2",
-    "turndown": "^7.2.4",
-    "turndown-plugin-gfm": "^1.0.2",
-    "tyme4ts": "^1.3.9",
-    "zod": "4.6.6"
+    "tyme4ts": "^1.3.9"
   },
   "devDependencies": {
-    "@codemirror/state": "6.5.0",
-    "@codemirror/view": "6.38.6",
     "@types/node": "^22.10.0",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
-    "@types/turndown": "^5.0.6",
     "builtin-modules": "3.3.0",
     "esbuild": "^0.25.12",
     "esbuild-plugin-less": "^1.3.39",
