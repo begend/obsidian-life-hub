@@ -28,7 +28,7 @@ QuickAdd 周记/月记 ──►  QuickAdd 自己的路径
 
 日记路径现在碰巧对齐：
 
-- 核心 Daily Notes：`PeriodicNotes` + `YYYY/[Daily]/MM/YYYY-MM-DD` + 模板 `PeriodicNotes/Templates/Daily`
+- 核心 Daily Notes：`PeriodicNotes` + `YYYY/Daily/MM/YYYY-MM-DD` + 模板 `PeriodicNotes/Templates/Daily`（与 LifeOS `periodicLocation` 一致，`Daily` 不带方括号）
 - LifeOS：`periodicLocation` 日路径相同
 
 **周记已经分叉**：LifeOS 用 ISO 周年（`gggg-[W]WW` / `isoWeekYear`），QuickAdd 用日历年。所以统一必须落在命令与创建函数，不能只靠「现在打开的是同一篇」。
