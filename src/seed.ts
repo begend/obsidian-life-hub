@@ -92,7 +92,9 @@ export async function validateDailyNotes(plugin: Plugin): Promise<void> {
   const adapter = plugin.app.vault.adapter;
   const path = `${plugin.app.vault.configDir}/daily-notes.json`;
   const expected = {
-    folder: "PeriodicNotes/{{DATE:YYYY}}/[Daily]/{{DATE:MM}}",
+    // LifeOS 日路径（periodicLocation）：PeriodicNotes/YYYY/Daily/MM/YYYY-MM-DD，
+    // Daily 不带方括号（home-ia.md 的 [Daily] 是笔误，方括号会被当字面量路径）。
+    folder: "PeriodicNotes/{{date:YYYY}}/Daily/{{date:MM}}",
     format: "YYYY-MM-DD",
     template: "PeriodicNotes/Templates/Daily",
   };
