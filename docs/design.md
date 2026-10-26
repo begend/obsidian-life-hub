@@ -295,46 +295,13 @@ Bases 通过 `parent_task` 字段识别子任务。
 
 # 五、Qiaomu Home 最终页面
 
-## 1. 首页
+首页标签、按钮命令、任务卡互斥和 `hub.layoutVersion` 以 [home-ia.md](home-ia.md) 为准。下面只保留仪表盘笔记里嵌 Bases 的部分，避免和驾驶舱合同两套清单。
 
-模块：
+## 1. 首页 / 日程 / 专注
 
-- 快速捕获
-- Inbox 预览
-- 今日待办
-- 今日重点
-- 专注计时
-- 最近笔记
-- 常用快捷入口
+见 [home-ia.md](home-ia.md) 第 2 节（唯一周期入口）和第 5 节（四页互斥布局）。
 
-## 2. 日程中心
-
-快捷入口：
-
-- 今日日记
-- 本周周记
-- 本月月记
-- 本季度季记
-- 本年年度复盘
-- 打开 Calendar 月视图
-- 今日到期任务
-- 逾期任务
-- 专注计时
-
-调用 LifeOS 命令：
-
-```text
-periodic-para:periodic-para-create-daily-note
-periodic-para:periodic-para-create-weekly-note
-periodic-para:periodic-para-create-monthly-note
-periodic-para:periodic-para-create-quarterly-note
-periodic-para:periodic-para-create-yearly-note
-periodic-para:periodic-para-open-today-records
-periodic-para:periodic-para-quick-record
-periodic-para:periodic-para-quick-task
-```
-
-## 3. 项目中心
+## 2. 项目中心（Dashboard 笔记）
 
 Qiaomu Home 不直接嵌入完整 Base，而是提供入口：
 
@@ -363,14 +330,9 @@ Qiaomu Home 不直接嵌入完整 Base，而是提供入口：
 ![[Projects.base#逾期任务]]
 ```
 
-同时 Qiaomu Home 保留：
+Home 项目页上的卡片与按钮见 [home-ia.md](home-ia.md) 第 5 节，不在这里再列一套。
 
-- 今日到期
-- 逾期任务
-- 项目下一步
-- 项目文件夹快捷入口
-
-## 4. 知识中心
+## 3. 知识中心
 
 入口：
 
@@ -382,7 +344,7 @@ Qiaomu Home 不直接嵌入完整 Base，而是提供入口：
 - 回顾一篇
 - 孤立笔记
 
-## 5. 阅读中心
+## 4. 阅读中心
 
 - Qiaomu Reader
 - Qiaomu AI RSS

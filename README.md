@@ -6,7 +6,7 @@ Obsidian 融合插件：把 [Qiaomu Home](https://github.com/joeseesun/qiaomu-ho
 
 这不是官方乔木或 LifeOS 发行版。许可证为 GPL-3.0-only，见 `LICENSE` 与 `NOTICE.md`。
 
-系统分层、数据模型和验收标准见 [docs/design.md](docs/design.md)（来自库内《重构的tpl-v1.md》）。
+系统分层、数据模型和验收标准见 [docs/design.md](docs/design.md)（来自库内《重构的tpl-v1.md》）。首页板块、命令入口和布局版本门见 [docs/home-ia.md](docs/home-ia.md)。
 
 ## 安装
 
@@ -25,4 +25,4 @@ Obsidian 融合插件：把 [Qiaomu Home](https://github.com/joeseesun/qiaomu-ho
 
 ## 首页
 
-日程页带「今日开始」「进行中」；快捷入口指向 LifeOS 周期命令、项目中心和今日任务。
+驾驶舱合同见 [docs/home-ia.md](docs/home-ia.md)：主页是索引，日程放时间切片，项目放项目下一步，周期按钮只走 LifeOS 命令。实现用 `hub.layoutVersion` 只迁移一次，避免每次启用把模块叠回去。
