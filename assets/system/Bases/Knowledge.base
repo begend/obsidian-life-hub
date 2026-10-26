@@ -1,0 +1,22 @@
+filters:
+  and:
+    - file.ext == "md"
+    - or:
+        - file.inFolder("30-Resources")
+        - file.inFolder("20-Areas")
+    - not:
+        - file.inFolder("90-System")
+        - file.inFolder("PeriodicNotes/Templates")
+views:
+  - type: table
+    name: 最近修改
+    order:
+      - file.mtime
+      - file.name
+  - type: table
+    name: 按目录
+    groupBy:
+      property: file.folder
+      direction: ASC
+    order:
+      - file.name

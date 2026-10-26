@@ -1,0 +1,9 @@
+[submodule "vendor/qiaomu-home"]
+	path = vendor/qiaomu-home
+	url = https://github.com/joeseesun/qiaomu-home.git
+[submodule "vendor/qiaomu-ai-rss"]
+	path = vendor/qiaomu-ai-rss
+	url = https://github.com/joeseesun/qiaomu-ai-rss.git
+[submodule "vendor/lifeos"]
+	path = vendor/lifeos
+	url = https://github.com/quanru/obsidian-lifeos.git

@@ -1,0 +1,10 @@
+{
+  "id": "life-hub",
+  "name": "Life Hub",
+  "version": "0.1.0",
+  "minAppVersion": "1.13.0",
+  "description": "Qiaomu Home + LifeOS + RSS 融合入口：壁纸、周期笔记、PARA、UseMemos、今日任务与个人模板。",
+  "author": "begend",
+  "authorUrl": "https://github.com/begend",
+  "isDesktopOnly": false
+}

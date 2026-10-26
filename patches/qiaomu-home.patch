@@ -1,0 +1,109 @@
+diff --git a/src/module-categories.ts b/src/module-categories.ts
+index d4bd117..c3f5cdb 100644
+--- a/src/module-categories.ts
++++ b/src/module-categories.ts
+@@ -18,7 +18,7 @@ export const MODULE_CATEGORIES: Array<{ id: ModuleCategory; zh: string; en: stri
+ const BY_ID: Record<string, ModuleCategory> = {
+   "daily-preview": "today", "daily-focus": "today", "daily-timeline": "today", "daily-calendar": "today", "habit-checkin": "today",
+   "weekly-review": "today", "quick-capture": "today", "inbox-preview": "today",
+-  "todo": "tasks", "due-today": "tasks", "overdue": "tasks", "project-next": "tasks", "milestones": "tasks", "goal-progress": "tasks",
++  "todo": "tasks", "due-today": "tasks", "start-today": "tasks", "in-progress": "tasks", "overdue": "tasks", "project-next": "tasks", "milestones": "tasks", "goal-progress": "tasks",
+   "focus-timer": "tasks", "countdown": "tasks", "calendar-next": "tasks",
+   "recent": "notes", "recently-modified": "notes", "review-note": "notes", "note-preview": "notes", "working-set": "notes",
+   "template-create": "notes", "saved-search": "notes", "flashcards": "notes", "prompt-snippets": "notes", "video-notes": "notes",
+diff --git a/src/productivity-catalog.ts b/src/productivity-catalog.ts
+index fcb7215..91fc54b 100644
+--- a/src/productivity-catalog.ts
++++ b/src/productivity-catalog.ts
+@@ -3,6 +3,8 @@ export const PRODUCTIVITY_MODULES = {
+   "habit-checkin": { zh: "今日习惯", en: "Daily habits", icon: "circle-check", description: "每天点一下，给几个小习惯打卡，记录保存在日记里。", descriptionEn: "Tap to check off a few daily habits; records live in your daily notes.", folder: false, path: false, count: false },
+   "working-set": { zh: "笔记工作集", en: "Note working set", icon: "panels-top-left", description: "保存当前打开的笔记，下次一起恢复。", descriptionEn: "Save open notes and reopen them together.", folder: false, path: false, count: false },
+   "due-today": { zh: "今日到期", en: "Due today", icon: "calendar-check", description: "汇总未完成、今天到期的 Markdown 任务。", descriptionEn: "Unfinished Markdown tasks due today.", folder: true, path: false, count: true },
++  "start-today": { zh: "今日开始", en: "Starts today", icon: "plane-takeoff", description: "今天开始（🛫）的未完成任务。", descriptionEn: "Unfinished Markdown tasks that start today.", folder: true, path: false, count: true },
++  "in-progress": { zh: "进行中", en: "In progress", icon: "loader", description: "状态为进行中（[/]）的任务。", descriptionEn: "Tasks marked in progress with [/].", folder: true, path: false, count: true },
+   "overdue": { zh: "逾期任务", en: "Overdue tasks", icon: "calendar-x", description: "找到散落在笔记中、已经过期的任务。", descriptionEn: "Find overdue tasks across your notes.", folder: true, path: false, count: true },
+   "project-next": { zh: "项目下一步", en: "Project next steps", icon: "list-start", description: "每篇项目笔记的第一项未完成任务。", descriptionEn: "The first unfinished task in each project note.", folder: true, path: false, count: true },
+   "milestones": { zh: "近期里程碑", en: "Upcoming milestones", icon: "flag", description: "按日期查看未来到期的任务。", descriptionEn: "Upcoming dated tasks in chronological order.", folder: true, path: false, count: true },
+diff --git a/src/productivity-data.ts b/src/productivity-data.ts
+index 91e63af..99992be 100644
+--- a/src/productivity-data.ts
++++ b/src/productivity-data.ts
+@@ -22,7 +22,7 @@ export function datedTasks(markdown: string): DatedTask[] {
+ export function taskBucket(task: Pick<DatedTask, "due" | "scheduled" | "start">, today: string): "today" | "overdue" | "upcoming" | null {
+   if (task.start && task.start > today) return task.due || task.scheduled ? "upcoming" : null;
+   if (task.due && task.due < today) return "overdue";
+-  if (task.due === today || task.scheduled === today) return "today";
++  if (task.due === today || task.scheduled === today || task.start === today) return "today";
+   if (!task.due && task.scheduled && task.scheduled < today) return "overdue";
+   if ((task.due && task.due > today) || (task.scheduled && task.scheduled > today)) return "upcoming";
+   return null;
+@@ -35,7 +35,7 @@ export function daysBetween(from: string, to: string): number {
+  * Recurring tasks cannot produce their next copy here; the caller warns the user.
+  */
+ export function completeTaskLine(line: string, today: string): string {
+-  const done = line.replace("[ ]", "[x]");
++  const done = line.replace(/\[([ /])\]/, "[x]");
+   if (/[[(]\w+::/.test(line)) return `${done.replace(/\s+$/, "")} [completion:: ${today}]`;
+   if (/[📅⏳🛫🔁⏫🔼🔽🔺⏬]/u.test(line)) return `${done.replace(/\s+$/, "")} ✅ ${today}`;
+   return done;
+diff --git a/src/productivity-ui.ts b/src/productivity-ui.ts
+index 9c1bad1..ff24f2c 100644
+--- a/src/productivity-ui.ts
++++ b/src/productivity-ui.ts
+@@ -82,7 +82,7 @@ export function renderProductivity(parent: HTMLElement, plugin: QiaomuHomePlugin
+   };
+   if (config.folder && options.folder) card.createDiv({ cls: "qh-native-scope", text: options.folder });
+   const files = () => app.vault.getMarkdownFiles().filter(file => eligibleNote(file.path) && inFolder(file.path, options.folder));
+-  if (["due-today", "overdue", "project-next", "milestones"].includes(id)) {
++  if (["due-today", "start-today", "in-progress", "overdue", "project-next", "milestones"].includes(id)) {
+     if (id === "project-next" && !options.folder) { message(L("先选择项目笔记所在文件夹", "Choose the folder containing project notes")); button(body, L("选择文件夹", "Choose folder"), configure, "settings-2", true); return; }
+     run(async () => {
+       const today = localDay();
+@@ -94,6 +94,8 @@ export function renderProductivity(parent: HTMLElement, plugin: QiaomuHomePlugin
+       if (shownByTodo) tasks = tasks.filter(task => task.path !== shownByTodo);
+       const bucket = (task: IndexedTask) => taskBucket(task, today);
+       if (id === "due-today") tasks = tasks.filter(task => bucket(task) === "today" || (withOverdue && bucket(task) === "overdue"));
++      else if (id === "start-today") tasks = tasks.filter(task => task.start === today);
++      else if (id === "in-progress") tasks = tasks.filter(task => task.mark === "/");
+       else if (id === "overdue") tasks = tasks.filter(task => bucket(task) === "overdue");
+       else if (id === "milestones") tasks = tasks.filter(task => task.due !== null && task.due > today);
+       else { const seen = new Set<string>(); tasks = tasks.filter(task => { if (seen.has(task.path)) return false; seen.add(task.path); return true; }); }
+@@ -101,7 +103,7 @@ export function renderProductivity(parent: HTMLElement, plugin: QiaomuHomePlugin
+       if (id !== "project-next") tasks.sort((a, b) => when(a).localeCompare(when(b)) || a.path.localeCompare(b.path));
+       if (!card.isConnected) return;
+       body.empty();
+-      if (!tasks.length) message(id === "due-today" ? L("今天没有到期任务", "Nothing due today") : id === "overdue" ? L("没有逾期任务", "No overdue tasks") : L("没有符合条件的任务", "No matching tasks"));
++      if (!tasks.length) message(id === "due-today" ? L("今天没有到期任务", "Nothing due today") : id === "start-today" ? L("今天没有开始的任务", "Nothing starting today") : id === "in-progress" ? L("没有进行中的任务", "Nothing in progress") : id === "overdue" ? L("没有逾期任务", "No overdue tasks") : L("没有符合条件的任务", "No matching tasks"));
+       for (const task of tasks.slice(0, options.limit)) {
+         const file = app.vault.getAbstractFileByPath(task.path); if (!(file instanceof TFile)) continue;
+         const late = bucket(task) === "overdue" ? daysBetween(when(task), today) : 0;
+diff --git a/src/todo-data.ts b/src/todo-data.ts
+index 4ed718c..ceada4a 100644
+--- a/src/todo-data.ts
++++ b/src/todo-data.ts
+@@ -1,4 +1,4 @@
+-export interface TodoItem { line: number; raw: string; text: string }
++export interface TodoItem { line: number; raw: string; text: string; mark?: string }
+ /** Only plain unchecked Markdown tasks, outside YAML and fenced code. */
+ export function readTodos(content: string): TodoItem[] {
+   const rows = content.split('\n');
+@@ -9,8 +9,8 @@ export function readTodos(content: string): TodoItem[] {
+     const boundary = /^\s{0,3}(`{3,}|~{3,})/.exec(raw);
+     if (boundary) { if (!fence) fence = boundary[1]; else if (boundary[1][0] === fence[0] && boundary[1].length >= fence.length) fence = ''; return; }
+     if (fence) return;
+-    const match = /^\s*(?:[-*+]|\d+[.)])\s+\[ \]\s+(.+?)\r?$/.exec(raw);
+-    if (match) result.push({ line, raw, text: match[1] });
++    const match = /^\s*(?:[-*+]|\d+[.)])\s+\[([ /])\]\s+(.+?)\r?$/.exec(raw);
++    if (match) result.push({ line, raw, text: match[2], mark: match[1] });
+   });
+   return result;
+ }
+@@ -25,7 +25,7 @@ export function locateTodo(current: string, item: TodoItem): number {
+ export function completeTodo(current: string, _snapshot: string, item: TodoItem): string {
+   const rows = current.split('\n');
+   const line = locateTodo(current, item);
+-  rows[line] = rows[line].replace('[ ]', '[x]');
++  rows[line] = rows[line].replace(/\[([ /])\]/, '[x]');
+   return rows.join('\n');
+ }
+ /** Reverts a completion made from Home; `done` is exactly what Home wrote (several lines for a recurring task). */

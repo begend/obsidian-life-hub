@@ -1,0 +1,159 @@
+filters:
+  and:
+    - or:
+        - type == "project"
+        - type == "task"
+    - not:
+        - file.inFolder("90-System")
+        - file.inFolder("010-tpl")
+formulas:
+  状态: if(status == "active" || status == "进行中", "进行中", if(status == "planned" || status == "待开始", "待开始", if(status == "paused" || status == "暂停", "暂停", if(status == "done" || status == "完成", "完成", if(status == "dropped" || status == "放弃", "放弃", status)))))
+  摘要: if(due, priority + " · " + due.format("YYYY-MM-DD"), priority)
+  剩余: if(due, due - today(), "")
+properties:
+  status:
+    displayName: 状态
+  priority:
+    displayName: 优先级
+  area:
+    displayName: 领域
+  due:
+    displayName: 截止
+  scheduled:
+    displayName: 计划
+  project:
+    displayName: 所属项目
+  formula.状态:
+    displayName: 状态
+  formula.剩余:
+    displayName: 剩余
+views:
+  - type: kanban
+    name: 项目看板
+    filters:
+      and:
+        - type == "project"
+        - status != "dropped"
+        - status != "放弃"
+    groupBy:
+      property: status
+      direction: ASC
+    groupOrder:
+      - 待开始
+      - 进行中
+      - 暂停
+      - 完成
+    order:
+      - file.name
+      - formula.摘要
+  - type: table
+    name: 项目总览
+    filters:
+      and:
+        - type == "project"
+    groupBy:
+      property: status
+      direction: ASC
+    order:
+      - file.name
+      - status
+      - priority
+      - area
+      - due
+      - formula.剩余
+  - type: kanban
+    name: 任务看板
+    filters:
+      and:
+        - type == "task"
+        - status != "done"
+        - status != "cancelled"
+        - status != "完成"
+        - status != "取消"
+    groupBy:
+      property: status
+      direction: ASC
+    groupOrder:
+      - todo
+      - doing
+      - waiting
+      - 待办
+      - 进行中
+      - 等待
+    order:
+      - file.name
+      - formula.摘要
+      - project
+  - type: table
+    name: 任务总表
+    filters:
+      and:
+        - type == "task"
+    groupBy:
+      property: project
+      direction: ASC
+    order:
+      - file.name
+      - project
+      - status
+      - priority
+      - scheduled
+      - due
+  - type: table
+    name: 本周规划
+    filters:
+      and:
+        - type == "task"
+        - status != "done"
+        - status != "cancelled"
+        - or:
+            - "!scheduled"
+            - scheduled <= today() + "7d"
+    order:
+      - file.name
+      - scheduled
+      - due
+      - priority
+      - project
+  - type: table
+    name: 逾期
+    filters:
+      and:
+        - type == "task"
+        - status != "done"
+        - status != "cancelled"
+        - due < today()
+    order:
+      - file.name
+      - due
+      - priority
+      - project
+  - type: table
+    name: 待排期
+    filters:
+      and:
+        - type == "task"
+        - or:
+            - status == "todo"
+            - status == "待办"
+        - "!scheduled"
+        - "!due"
+    order:
+      - file.name
+      - priority
+      - project
+  - type: table
+    name: 本项目任务
+    filters:
+      and:
+        - type == "task"
+        - file.hasLink(this.file)
+    groupBy:
+      property: status
+      direction: ASC
+    order:
+      - file.name
+      - status
+      - priority
+      - scheduled
+      - due

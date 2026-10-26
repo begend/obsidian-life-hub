@@ -1,0 +1,13 @@
+filters:
+  and:
+    - file.ext == "md"
+    - or:
+        - file.inFolder("Books")
+        - file.inFolder("30-Resources/微信读书")
+        - file.inFolder("30-Resources/读书笔记")
+views:
+  - type: table
+    name: 阅读
+    order:
+      - file.mtime
+      - file.name
